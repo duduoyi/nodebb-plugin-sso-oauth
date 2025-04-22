@@ -46,8 +46,8 @@ const winston = require.main.require('winston');
 	 */
 
 const constants = Object.freeze({
-	type: '', // Either 'oauth' or 'oauth2'
-	name: '', // Something unique to your OAuth provider in lowercase, like "github", or "nodebb"
+	type: 'oauth2', // Either 'oauth' or 'oauth2'
+	name: 'keycloak', // Something unique to your OAuth provider in lowercase, like "github", or "nodebb"
 	oauth: {
 		requestTokenURL: '',
 		accessTokenURL: '',
@@ -56,12 +56,12 @@ const constants = Object.freeze({
 		consumerSecret: nconf.get('oauth:secret'), // don't change this line
 	},
 	oauth2: {
-		authorizationURL: '',
-		tokenURL: '',
+		authorizationURL: 'https://139.196.31.214:8443/realms/test/protocol/openid-connect/auth',
+		tokenURL: 'https://139.196.31.214:8443/realms/test/protocol/openid-connect/token',
 		clientID: nconf.get('oauth:id'), // don't change this line
 		clientSecret: nconf.get('oauth:secret'), // don't change this line
 	},
-	userRoute: '', // This is the address to your app's "user profile" API endpoint (expects JSON)
+	userRoute: 'https://139.196.31.214:8443/realms/test/protocol/openid-connect/userinfo', // This is the address to your app's "user profile" API endpoint (expects JSON)
 });
 
 const OAuth = module.exports;
@@ -178,7 +178,7 @@ OAuth.parseUserReturn = function (data, callback) {
 	// console.log(data);
 
 	const profile = {};
-	profile.id = data.id;
+	profile.id = data.sub;
 	profile.displayName = data.name;
 	profile.emails = [{ value: data.email }];
 
